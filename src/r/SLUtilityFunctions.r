@@ -1,20 +1,10 @@
----
-title: "R Notebook"
-output: html_notebook
----
-# Subjective Logic Base Code
-
-Implementation of the multi-source Weighted Belief Fusion Operator [@dietzel2014flexible] - an associative variant of Josang's original version [@josang2016subjective].
-
-```{r}
-
 multiplyUncertainties <- function(opinions,l){
   pd = NULL
   for(j in setdiff(opinions$Label,l)){
-      if(is.null(pd))
-        pd = opinions[opinions$Label==j,]$Uncertainty
-      else
-        pd = pd * opinions[opinions$Label==j,]$Uncertainty
+    if(is.null(pd))
+      pd = opinions[opinions$Label==j,]$Uncertainty
+    else
+      pd = pd * opinions[opinions$Label==j,]$Uncertainty
   }
   return(pd)
 }
@@ -29,7 +19,7 @@ multiSourceWeightedFusion <- function(opinions){
     sm = sm + (el * pd)
   }
   dsm <- 0
-    
+  
   for(l in opinions$Label){
     pd = multiplyUncertainties(opinions,l)
     dsm = dsm + pd
@@ -57,28 +47,9 @@ multiSourceWeightedFusion <- function(opinions){
   return(data.frame(Label="fused",Belief = belief, Disbelief = disbelief, Uncertainty=uncertainty, Apriori = apriori))
 }
 
-```
 
-A quick test to make sure that our implementation provides the same results as in [@dietzel2014flexible].
+#Subtraction - compute the difference between two subjective opinions
 
-```{r}
-b1 <- data.frame(Label="l1",Belief=0.1,Disbelief=0.3,Uncertainty=0.6, Apriori=0.5)
-b2 <- data.frame(Label="l2",Belief=0.4,Disbelief=0.2,Uncertainty=0.4, Apriori=0.5)
-b3 <- data.frame(Label="l3",Belief=0.7,Disbelief=0.1,Uncertainty=0.2, Apriori=0.5)
-
-test <- rbind(b1,b2,b3)
-
-result <- multiSourceWeightedFusion(test)
-
-stopifnot(round(result$Belief,digits=3) == 0.562)
-stopifnot(round(result$Disbelief,digits=3) == 0.146)
-stopifnot(round(result$Uncertainty,digits=3) == 0.292)
-stopifnot(round(result$Apriori,digits=3) == 0.500)
-```
-
-Subtraction - compute the difference between two subjective opinions
-
-```{r}
 subtract <- function(opinionA, opinionB){
   aprioriA = 0.5
   aprioriB = 0.5
@@ -92,22 +63,18 @@ subtract <- function(opinionA, opinionB){
   apriori = aprioriA - aprioriB
   return(data.frame(Belief = belief, Disbelief = disbelief, Uncertainty = uncertainty, Apriori = apriori))
 }
-```
 
+#Compute the projected probability from a Subjective Opinion.
 
-Compute the projected probability from a Subjective Opinion.
-
-```{r}
 projectedProbability <- function(apriori, belief, uncertainty){
   probability  = belief + (apriori * uncertainty)
   return(probability)
 }
-```
 
 
-Computes the beta-distribution that corresponds to a given subjective opinion [@josang2016subjective,@duan2016representation].
 
-```{r}
+#Computes the beta-distribution that corresponds to a given subjective opinion [@josang2016subjective,@duan2016representation].
+
 computeBeta <- function(opinion){
   if(opinion$Disbelief == 0){
     opinion$Uncertainty = opinion$Uncertainty - 0.00001
@@ -115,24 +82,20 @@ computeBeta <- function(opinion){
   }
   r = ((opinion$Belief * 2) / opinion$Uncertainty) + 1
   s = ((opinion$Disbelief * 2)  / opinion$Uncertainty) + 1
-
+  
   distribution = dbeta(x=seq(0,1,length=100),shape1=r, shape2=s)
   bDist <- data.frame(x=seq(0,1,length=100),y=distribution)
   bDist$Label=rep(opinion$Label,100)
   return(bDist)
 }
 
-```
-
-Plot the barycentric triangle for a given opinion [@josang2016subjective].
-
-```{r}
+#Plot the barycentric triangle for a given opinion [@josang2016subjective].
 
 plotTriangle <- function(opinion, withLines){
   triangle <- data.frame(x=c(0,1,0.5,0),y=c(0,0,0.5,0))
   coords <- data.frame(x=c(0,0.25,1,0.75,0,0.5,0.5),y=c(0,0.25,0,0.25,0,0,0.5))
   apriori <- data.frame(x=c(0.5,opinion$Apriori),y=c(0.5,0))  
-    
+  
   aX = 0
   aY = 0
   bX = 1 * opinion$Belief
@@ -155,12 +118,9 @@ plotTriangle <- function(opinion, withLines){
   p <- p + geom_point(aes(size=1, x=pX,y=pY), shape=8,colour="blue")+ geom_text(aes(size=0.8),label=opinion$Label,x=0,y=0.5,colour="blue", fontface = "bold",hjust=0,vjust=1) + theme(legend.position = "none",axis.title.x=element_blank(),axis.title.y=element_blank(),axis.text.y=element_blank(),axis.text.x=element_blank()) + geom_text(aes(size=0.8),label="Disbelief",x=0,y=-0.015, fontface = "bold",hjust=0) + geom_text(aes(size=0.8),label="Belief",x=1,y=-0.015, fontface = "bold",hjust=1) + geom_text(aes(size=0.8),label="Uncertainty",x=0.5,y=0.502, fontface = "bold",hjust=0) #+ geom_text(aes(size=0.5),label=paste0("(",round(opinion$Belief,2),",",round(opinion$Disbelief,2),",",round(opinion$Uncertainty,2),")"),x=pX,y=pY+0.02, colour='blue') 
   return(p)
 }
-```
 
 
-Plot a time-line - changes in opinion as a series of arrows in a barycentric triangle.
-
-```{r}
+#Plot a time-line - changes in opinion as a series of arrows in a barycentric triangle.
 
 getCoord <- function(opinion){
   aX = 0
@@ -187,7 +147,7 @@ plotTimeTriangle <- function(opinions){
     xv <- c(xv,o$x)
     yv <- c(yv,o$y)
   }
-
+  
   route <- data.frame(x=xv,y=yv)
   
   colours <- seq(1,nrow(opinions))
@@ -195,10 +155,6 @@ plotTimeTriangle <- function(opinions){
   p <- ggplot(triangle,aes(x=x,y=y, size=1))+geom_path(aes(size=0.5)) + geom_path(data=coords,size=0.25,linetype = "dashed")  + theme(legend.position = "none",axis.title.x=element_blank(),axis.title.y=element_blank(),axis.text.y=element_blank(),axis.text.x=element_blank()) + geom_text(aes(size=0.8),label="Disbelief",x=0,y=-0.015, fontface = "bold",hjust=0) + geom_text(aes(size=0.8),label="Belief",x=1,y=-0.015, fontface = "bold",hjust=1) + geom_text(aes(size=0.8),label="Uncertainty",x=0.5,y=0.502, fontface = "bold",hjust=0) + geom_path(data=route,aes(colour=colours), size=0.25)
   return(p)
 }
-```
-
-
-```{r}
 
 computeTriangles <- function(beliefs){
   triangles <- list()
@@ -239,7 +195,7 @@ soPlot <- function(beliefs, rows, min, max){
     theme(axis.text.x = element_text(size=8,angle = 315),axis.title.x = element_text(size=8),
           axis.text.y = element_text(size=8),axis.title.y = element_text(size=8),legend.text = element_text(size=8),legend.title = element_blank())+ 
     xlab("Effect size") +  scale_x_continuous(breaks=seq(0,1,length.out=7),labels=c(paste("\u2264",min),axisSequence[2:6],paste("\u2265",max)))
-
+  
   separateTriangles <- ggarrange(plotlist=triangles, ncol=length(triangles))
   final <- NULL
   if(rows == 1){
@@ -254,37 +210,34 @@ soPlot <- function(beliefs, rows, min, max){
 #Assumes a dataframe with a "Group" column, separating out the different groups of beliefs
 groupedBeliefPlot <- function(beliefs, min, max){
   local({
-  lowerPlots = list()
-  fused = data.frame()
-  lengths <- c()
-  labels <- c()
-  counter <- 1
-  if(is.null(beliefs$Group)){
-    beliefs$Group <- rep("All", nrow(beliefs))
-  }
-  for(g in unique(beliefs$Group)){
-    subset <- beliefs[beliefs$Group==g,]
-    lowerPlots[[counter]] <- soPlot(subset,2,min,max)+theme(panel.border = element_rect(colour = "black", fill=NA, size=1))
-    f <- multiSourceWeightedFusion(subset)
-    lengths <- c(lengths,nrow(subset))
-    labels <- c(labels,g)
-    f$Label <- paste("Fused\n",g)
-    if(nrow(fused)==0){
-      fused <- f
+    lowerPlots = list()
+    fused = data.frame()
+    lengths <- c()
+    labels <- c()
+    counter <- 1
+    if(is.null(beliefs$Group)){
+      beliefs$Group <- rep("All", nrow(beliefs))
     }
-    else{
-      fused <- rbind(fused,f)
+    for(g in unique(beliefs$Group)){
+      subset <- beliefs[beliefs$Group==g,]
+      lowerPlots[[counter]] <- soPlot(subset,2,min,max)+theme(panel.border = element_rect(colour = "black", fill=NA, size=1))
+      f <- multiSourceWeightedFusion(subset)
+      lengths <- c(lengths,nrow(subset))
+      labels <- c(labels,g)
+      f$Label <- paste("Fused\n",g)
+      if(nrow(fused)==0){
+        fused <- f
+      }
+      else{
+        fused <- rbind(fused,f)
+      }
+      counter = counter + 1
     }
-    counter = counter + 1
-  }
-  print(fused)
-  upperPlot <- soPlot(fused,1,min,max) + border()
-  lowerPlot <- ggarrange(plotlist=lowerPlots,nrow=1,ncol=length(lowerPlots),widths=lengths,labels=labels) 
-  finalPlot <- ggarrange(upperPlot,lowerPlot,ncol=1,nrow=2, heights=c(1,2))
-  return(finalPlot)
+    print(fused)
+    upperPlot <- soPlot(fused,1,min,max) + border()
+    lowerPlot <- ggarrange(plotlist=lowerPlots,nrow=1,ncol=length(lowerPlots),widths=lengths,labels=labels) 
+    finalPlot <- ggarrange(upperPlot,lowerPlot,ncol=1,nrow=2, heights=c(1,2))
+    return(finalPlot)
   })
 }
-
-```
-
 
