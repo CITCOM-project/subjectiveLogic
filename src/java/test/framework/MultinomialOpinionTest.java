@@ -1,6 +1,6 @@
 package framework;
 
-import framework.MultinomialOpinion;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
