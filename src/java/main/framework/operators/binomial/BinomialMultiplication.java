@@ -1,8 +1,9 @@
 package framework.operators.binomial;
 
 import framework.BinomialOpinion;
+import framework.operators.Operator;
 
-public class BinomialMultiplication extends BinomialOperator {
+public class BinomialMultiplication extends Operator<BinomialOpinion> {
 
 
     @Override

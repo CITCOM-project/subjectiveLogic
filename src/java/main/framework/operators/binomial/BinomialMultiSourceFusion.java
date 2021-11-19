@@ -3,9 +3,10 @@ package framework.operators.binomial;
 import java.util.List;
 import java.util.ArrayList;
 
+import framework.operators.Operator;
 import framework.BinomialOpinion;
 
-public class BinomialMultiSourceFusion extends BinomialOperator{
+public class BinomialMultiSourceFusion extends Operator<BinomialOpinion>{
 
     @Override
     public BinomialOpinion apply(BinomialOpinion... binomialOpinion) {
