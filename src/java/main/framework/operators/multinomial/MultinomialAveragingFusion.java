@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
 
-public class MultinomialAveragingFusion extends Operator<MultinomialOpinion>{
+public class MultinomialAveragingFusion implements Operator<MultinomialOpinion>{
 
     @Override
     public MultinomialOpinion apply(MultinomialOpinion... opinions) {

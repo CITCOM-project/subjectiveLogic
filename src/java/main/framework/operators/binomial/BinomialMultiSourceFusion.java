@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import framework.operators.Operator;
 import framework.BinomialOpinion;
 
-public class BinomialMultiSourceFusion extends Operator<BinomialOpinion>{
+public class BinomialMultiSourceFusion implements Operator<BinomialOpinion>{
 
     @Override
     public BinomialOpinion apply(BinomialOpinion... binomialOpinion) {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import framework.operators.Operator;
 import framework.MultinomialOpinion;
 
-public class MultinomialMultiplication extends Operator<MultinomialOpinion>{
+public class MultinomialMultiplication implements Operator<MultinomialOpinion>{
 
     @Override
     public MultinomialOpinion apply(MultinomialOpinion... opinions) {

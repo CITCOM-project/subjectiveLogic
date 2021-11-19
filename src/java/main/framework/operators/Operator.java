@@ -1,6 +1,6 @@
 package framework.operators;
 
-public abstract class Operator<T> {
+public interface Operator<T> {
 
     /**
      * Applies the operator and returns the result. 
