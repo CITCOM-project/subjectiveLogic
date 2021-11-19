@@ -1,10 +1,11 @@
 package framework;
 
-import framework.BinomialOpinion;
+import framework.operators.binomial.BinomialMultiSourceFusion;
+import framework.operators.binomial.BinomialMultiplication;
+import framework.operators.Operator;
+
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -15,21 +16,34 @@ public class BinomialOpinionTest {
     public void multiply() {
         BinomialOpinion from = new BinomialOpinion(0.15,0.5,0.34,0.5);
         BinomialOpinion to = new BinomialOpinion(0.56,0.09,0.35,0.31);
-        from.multiply(to);
-        assertEquals(0.17,from.getBelief(),0.01);
-        assertEquals(0.55,from.getDisbelief(),0.01);
-        assertEquals(0.27,from.getUncertainty(),0.01);
-        assertEquals(0.16,from.getApriori(),0.01);
+
+        BinomialMultiplication multiply = new BinomialMultiplication();
+
+        BinomialOpinion result = multiply.apply(from,to);
+
+        assertEquals(0.17,result.getBelief(),0.01);
+        assertEquals(0.55,result.getDisbelief(),0.01);
+        assertEquals(0.27,result.getUncertainty(),0.01);
+        assertEquals(0.16,result.getApriori(),0.01);
 
 
     }
 
+    /**
+     * Example from Figure 7.2 in Josang Subjective Logic Book
+     */
     @Test
     public void multiply2() {
-        BinomialOpinion from = new BinomialOpinion(0.15,0.51,0.34,0.5);
-        BinomialOpinion to = new BinomialOpinion(0.49,0.25,0.29,1);
-        from.multiply(to);
-        System.out.println(from);
+        BinomialOpinion from = new BinomialOpinion(0.75,0.15,0.10,0.5);
+        BinomialOpinion to = new BinomialOpinion(0.10,0.00,0.90,0.2);
+        
+        BinomialMultiplication multiply = new BinomialMultiplication();
+        BinomialOpinion result = multiply.apply(from,to);
+
+        assertEquals(0.15,result.getBelief(),0.01);
+        assertEquals(0.15,result.getDisbelief(),0.01);
+        assertEquals(0.70,result.getUncertainty(),0.01);
+        assertEquals(0.10,result.getApriori(),0.01);
 
 
     }
@@ -41,30 +55,37 @@ public class BinomialOpinionTest {
         BinomialOpinion closeD = new BinomialOpinion(0.15,0.6,0.25,0.5);
         BinomialOpinion exitA = new BinomialOpinion(0.15,0,0.85,0.5);
 
-        openA.multiply(editC);
-        openA.multiply(closeD);
-        openA.multiply(exitA);
+        BinomialMultiplication multiply = new BinomialMultiplication();
 
-        System.out.println(openA);
+        BinomialOpinion result = multiply.apply(openA,editC,closeD,exitA);
+
+        System.out.println(result);
 
 
     }
 
+
+    /**
+     * Test from Table 1 (WBF column) in van der Hejden paper
+     * https://arxiv.org/pdf/1805.01388.pdf
+     */
     @Test
     public void multiSourceFusion() {
 
-        List<BinomialOpinion> sources = new ArrayList<>();
         BinomialOpinion b1 = new BinomialOpinion(0.1,0.3,0.6);
         BinomialOpinion b2 = new BinomialOpinion(0.4,0.2,0.4);
         BinomialOpinion b3 = new BinomialOpinion(0.7,0.1,0.2);
 
-        sources.add(b1);
-        sources.add(b2);
-        sources.add(b3);
 
-        BinomialOpinion outcome = BinomialOpinion.multiSourceFusion(sources);
+        BinomialMultiSourceFusion bmsf = new BinomialMultiSourceFusion();
+        BinomialOpinion result = bmsf.apply(b1,b2,b3);
 
-        System.out.println(outcome);
+        assertEquals(0.562,result.getBelief(),0.01);
+        assertEquals(0.146,result.getDisbelief(),0.01);
+        assertEquals(0.292,result.getUncertainty(),0.01);
+        assertEquals(0.5,result.getApriori(),0.01);
+
+        System.out.println(result);
 
     }
 }

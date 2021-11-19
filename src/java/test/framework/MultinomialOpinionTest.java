@@ -3,6 +3,9 @@ package framework;
 
 import org.junit.Test;
 
+import framework.operators.multinomial.MultinomialAveragingFusion;
+import framework.operators.multinomial.MultinomialMultiplication;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +15,7 @@ import static org.junit.Assert.*;
 public class MultinomialOpinionTest {
 
     /**
-     * Test from page 125 in Subjective Logic book.
+     * Test from page 126 in Subjective Logic book.
      */
     @Test
     public void multiply() {
@@ -51,9 +54,10 @@ public class MultinomialOpinionTest {
         domsB.add(domainMutant);
         MultinomialOpinion b = new MultinomialOpinion(mutation, aprioriMutation, domsB);
 
-        MultinomialOpinion multiplied = a.multiply(b);
+        MultinomialMultiplication mm = new MultinomialMultiplication();
+        MultinomialOpinion multi = mm.apply(a,b);
 
-        for (Double product : multiplied.getBelief()) {
+        for (Double product : multi.getBelief()) {
             System.out.println(product);
         }
     }
@@ -94,7 +98,8 @@ public class MultinomialOpinionTest {
         domsB.add(domainMutant);
         MultinomialOpinion b = new MultinomialOpinion(mutation,aprioriMutation,domsB);
 
-        MultinomialOpinion multiplied = a.multiply(b);
+        MultinomialMultiplication mm = new MultinomialMultiplication();
+        MultinomialOpinion multiplied = mm.apply(a,b);
 
         List specificCombo = new ArrayList();
         specificCombo.add("M");
@@ -145,7 +150,9 @@ public class MultinomialOpinionTest {
         toFuse.add(a);
         toFuse.add(b);
 
-        MultinomialOpinion fused = MultinomialOpinion.averagingFusion(toFuse);
+        MultinomialAveragingFusion mm = new MultinomialAveragingFusion();
+        MultinomialOpinion fused = mm.apply(a,b);
+
         for(int i = 0; i<fused.getBelief().size(); i++){
             System.out.println(fused.getBelief().get(i));
         }
@@ -187,12 +194,9 @@ public class MultinomialOpinionTest {
         domainMutant.add(y2);
         domsB.add(domainMutant);
         MultinomialOpinion b = new MultinomialOpinion(mutation,aprioriMutation,domsB);
+        MultinomialAveragingFusion mm = new MultinomialAveragingFusion();
+        MultinomialOpinion fused = mm.apply(a,b);
 
-        Collection<MultinomialOpinion> toFuse = new ArrayList<>();
-        toFuse.add(a);
-        toFuse.add(b);
-
-        MultinomialOpinion fused = MultinomialOpinion.averagingFusion(toFuse);
         for(int i = 0; i<fused.getBelief().size(); i++){
             System.out.println(fused.getBelief().get(i));
         }

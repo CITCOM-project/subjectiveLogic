@@ -23,4 +23,19 @@ public abstract class SubjectiveOpinion<T> {
     public Double getUncertainty() {
         return uncertainty;
     }
+
+    public void setBelief(T belief) {
+        this.belief = belief;
+    }
+
+    public void setApriori(T apriori) {
+        this.apriori = apriori;
+    }
+
+    public void setUncertainty(double uncertainty) {
+        this.uncertainty = uncertainty;
+    }
+
+    
+
 }

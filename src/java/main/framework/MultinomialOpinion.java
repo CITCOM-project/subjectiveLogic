@@ -64,190 +64,8 @@ public class MultinomialOpinion extends SubjectiveOpinion<List<Double>>{
         return retOp;
     }
 
-    public MultinomialOpinion multiply(MultinomialOpinion operand){
 
-        List<List<Double>> singletonBeliefs = new ArrayList<>();
-        List<Double> beliefsB = operand.getBelief();
-        for(int i = 0; i< belief.size(); i++){
-
-            List<Double> sbeliefs = new ArrayList<>();
-            double currentBelief = belief.get(i);
-            for(int j = 0; j<beliefsB.size(); j++){
-                sbeliefs.add(currentBelief * beliefsB.get(j));
-            }
-            singletonBeliefs.add(i,sbeliefs);
-        }
-
-        List<Double> brows = new ArrayList<>();
-        for(int i = 0; i< belief.size(); i++){
-            brows.add(belief.get(i) * operand.getUncertainty());
-        }
-
-        List<Double> bcols = new ArrayList<>();
-        for(int i = 0; i< operand.getBelief().size(); i++){
-            bcols.add(beliefsB.get(i) * uncertainty);
-        }
-
-        List<Double> aprioriBeliefs = new ArrayList<>();
-        List<Double> aprioriB = operand.getApriori();
-        for(int i = 0; i< belief.size(); i++){
-            double currentApriori = apriori.get(i);
-            for(int j = 0; j<beliefsB.size(); j++){
-                aprioriBeliefs.add(currentApriori * aprioriB.get(j));
-            }
-        }
-
-        double uRows = sum(brows);
-        double uCols = sum(bcols);
-        double uDomain = uncertainty * operand.getUncertainty();
-
-        double maxU = uRows + uCols + uDomain;
-        double minU = uDomain;
-
-
-        double minUxys = maxU;
-        for(int i = 0; i< belief.size(); i++){
-            Double bx = belief.get(i);
-            Double ax = apriori.get(i);
-            List<Double> singletons = singletonBeliefs.get(i);
-            for(int j = 0; j<beliefsB.size(); j++){
-                Double by = operand.getBelief().get(j);
-                Double ay = operand.getApriori().get(j);
-                double bxys = singletons.get(j);
-                double uxy = uXY(bx,uncertainty,ax,by,operand.getUncertainty(),ay,bxys);
-                if(uxy < minUxys & uxy >= minU & uxy <= maxU){
-                    minUxys = uxy;
-                }
-            }
-        }
-
-        List<Double> productBeliefs = new ArrayList<>();
-        for(int i = 0; i< belief.size(); i++){
-            double bx = belief.get(i);
-            double ax = apriori.get(i);
-            for(int j = 0; j< operand.getBelief().size(); j++){
-                double by = beliefsB.get(j);
-                double ay = aprioriB.get(j);
-                double bxy = (bx+ax*uncertainty)*(by+ay*operand.getUncertainty())-ax*ay*minUxys;
-                productBeliefs.add(bxy);
-            }
-        }
-
-        List<List<List>> prodDomains = new ArrayList<>();
-
-        prodDomains.addAll(domain);
-        List<List> thisDomain = this.domain.get(this.domain.size()-1);
-        List<List<List>> otherDomains = operand.getDomain();
-        List<List> otherDomain = otherDomains.get(operand.domain.size()-1);
-        List<List> prodDomain = new ArrayList();
-
-        for(int i = 0; i<thisDomain.size();i++){
-            for(int j = 0; j<otherDomain.size();j++){
-                List prefix = thisDomain.get(i);
-                List suffix = otherDomain.get(j);
-                List concat = new ArrayList();
-                concat.addAll(prefix);
-                concat.addAll(suffix);
-                prodDomain.add(concat);
-            }
-        }
-        prodDomains.add(prodDomain);
-
-
-        return new MultinomialOpinion(productBeliefs,aprioriBeliefs,prodDomains);
-
-    }
-
-    public static MultinomialOpinion averagingFusion(Collection<MultinomialOpinion> opinions){
-        List<MultinomialOpinion> opList = new ArrayList();
-        opList.addAll(opinions);
-        boolean nonZeroUncertainty = true;
-        int beliefs = 0;
-        for(MultinomialOpinion op : opList){
-            if(op.getUncertainty()==0D)
-                nonZeroUncertainty = false;
-            beliefs = op.getBelief().size();
-        }
-        List<Double> fusedBeliefs = new ArrayList<>();
-        double uncertainty=0;
-        if(nonZeroUncertainty){
-            for(int i = 0; i<beliefs; i++){
-                double numeratorSum = 0D;
-                for(int j = 0; j<opList.size(); j++){
-                    MultinomialOpinion op = opList.get(j);
-
-
-                    double uncertaintyProduct = 1D;
-                    for(int k = 0; k<opList.size(); k++){
-                        if(k==j)
-                            continue;
-                        MultinomialOpinion curr = opList.get(k);
-                        uncertaintyProduct = uncertaintyProduct * curr.getUncertainty();
-                    }
-                    numeratorSum = numeratorSum + (uncertaintyProduct * op.getBelief().get(i));
-                }
-
-                double denominatorSum = getUncertaintyProduct(opList);
-                fusedBeliefs.add(i,numeratorSum/denominatorSum);
-            }
-
-            double uncertaintyProduct = 1D;
-            for(int k = 0; k<opList.size(); k++){
-                MultinomialOpinion curr = opList.get(k);
-                uncertaintyProduct = uncertaintyProduct * curr.getUncertainty();
-            }
-
-            double numerator = beliefs * uncertaintyProduct;
-
-            double denominator = getUncertaintyProduct(opList);
-            uncertainty = numerator / denominator;
-        }
-        else{
-            double weight = 1D/opList.size();
-            for(int i = 0; i<beliefs; i++) {
-                double beliefSum = 0D;
-                for (int j = 0; j < opList.size(); j++) {
-                    MultinomialOpinion op = opList.get(j);
-                    beliefSum+=weight*op.getBelief().get(i);
-
-                }
-                fusedBeliefs.add(i,beliefSum);
-            }
-
-        }
-
-
-        return new MultinomialOpinion(fusedBeliefs,opList.get(0).getDomain());
-    }
-
-    protected static double getUncertaintyProduct(List<MultinomialOpinion> opList) {
-        double denominatorSum = 0D;
-        for(int j = 0; j<opList.size(); j++){
-            //main.framework.MultinomialOpinion op = opList.get(j);
-
-            double uncertaintyProduct = 1D;
-            for(int k = 0; k<opList.size(); k++){
-                if(k==j)
-                    continue;
-                MultinomialOpinion curr = opList.get(k);
-                uncertaintyProduct = uncertaintyProduct * curr.getUncertainty();
-            }
-            denominatorSum = denominatorSum + (uncertaintyProduct);
-        }
-        return denominatorSum;
-    }
-
-    double uXY(double bx, double ux,double ax, double by, double uy, double ay, double bxyS){
-        return (((((bx+ax*ux)*(by+ay*uy))-bxyS)/(ax*ay)));
-    }
-
-    private double sum(List<Double> brows) {
-        double result = 0D;
-        for(Double b : brows){
-            result+=b;
-        }
-        return result;
-    }
+    
 
     /**
      * Big challenge with multinomial opinions is the exponential growth when multiplied together, especially several
@@ -345,6 +163,14 @@ public class MultinomialOpinion extends SubjectiveOpinion<List<Double>>{
 
     public List getDomain() {
         return domain;
+    }
+
+    public static double sum(List<Double> brows) {
+        double result = 0D;
+        for(Double b : brows){
+            result+=b;
+        }
+        return result;
     }
 
 }
