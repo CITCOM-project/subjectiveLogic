@@ -1,13 +1,17 @@
 # subjectiveLogic
 
 
-A small framework with code to support and Subjective Logic operations and visualise results.
+A small framework to support and Subjective Logic operations.
 
-In the Java framework, Subjective Opinions are the objects. There is the abstract framework.SubjectiveOpinion class, and then the two concrete subclasses: BinomialOpinion and MultinomialOpinion.
+## Subjective Logic Java Framework
 
-You can carry out SL operations by instantiating opinions (either Binomial or Multinomial). The operators to combine them (at least a couple) are implemented in the respected concrete classes. 
+There is the abstract framework.SubjectiveOpinion class, and then the two concrete subclasses: BinomialOpinion and MultinomialOpinion. These represent the raw opinions.
 
-Refer to the test cases for examples.
+Operators implement the simple framework.operators.Operator interface, which has the single apply function. This takes an arbitrary number of parameters (the relevant number of parameters depends on the operator) and returns an opinion of a given type (i.e. operators that implement BinomialOpinion operators will return an opinion of type BinomialOpinion).
+
+You can add additional operators to the framework.operators package.
+
+Examples are provided within the test cases. Test cases are currently based on examples from the Subjective Logic book.
 
 Please feel free to add operations as you see fit to the concrete classes. 
 
