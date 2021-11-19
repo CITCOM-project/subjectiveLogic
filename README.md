@@ -1,7 +1,7 @@
 # subjectiveLogic
 
 
-A small framework to support and Subjective Logic operations.
+A small framework to support and Subjective Logic operations. Pull requests very welcome.
 
 ## Subjective Logic Java Framework
 
@@ -15,6 +15,7 @@ Examples are provided within the test cases. Test cases are currently based on e
 
 Please feel free to add operations as you see fit to the concrete classes. 
 
-Pull requests very welcome.
 
-The R code is really just some utility code to, for example, visualise barycentric triangles and corresponding Beta-distributions.
+## R code
+
+The R code is really just some utility code to support visualisation of barycentric triangles (for binomial opinions) and corresponding Beta-distributions.
