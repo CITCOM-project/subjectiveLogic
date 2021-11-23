@@ -27,4 +27,25 @@ public class BinomialDeductionTest {
 
     }
 
+    /**
+     * Oracle data taken from https://folk.universitetetioslo.no/josang/sl/Op.html
+     */
+    @Test
+    public void deductionTest2(){
+        BinomialOpinion x = new BinomialOpinion(0.43, 0.18, 0.39,0.5);
+        BinomialOpinion ygx = new BinomialOpinion(0.7, 0, 0.3,0.65);
+        BinomialOpinion ynx = new BinomialOpinion(0.41, 0.59, 0,0.65);
+
+        BinomialDeduction bd = new BinomialDeduction(0.65);
+        BinomialOpinion result = bd.apply(ygx,ynx,x);
+        assertEquals(0.53,result.getBelief(),0.01);
+        assertEquals(0.19,result.getDisbelief(),0.01);
+        assertEquals(0.27,result.getUncertainty(),0.01);
+
+    }
+
+
+
+    
+
 }
