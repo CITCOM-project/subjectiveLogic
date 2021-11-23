@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>subjectiveLogic</groupId>
-    <artifactId>framework</artifactId>
+    <groupId>citcom</groupId>
+    <artifactId>subjectivelogic</artifactId>
     <version>1.0.0</version>
 
     <build>
@@ -36,7 +36,7 @@
         <repository>
             <id>github</id>
             <name>GitHub neilwalkinshaw Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/neilwalkinshaw/subjectiveLogic</url>
+            <url>https://maven.pkg.github.com/CITCOM-project/subjectiveLogic</url>
         </repository>
 </distributionManagement>
 </project>
