@@ -1,4 +1,4 @@
-package framework;
+package citcom.subjectiveLogic;
 
 public abstract class SubjectiveOpinion<T> {
 

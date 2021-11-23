@@ -1,16 +1,18 @@
-package framework;
+package citcom.subjectiveLogic;
 
 
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-import framework.operators.multinomial.MultinomialAveragingFusion;
-import framework.operators.multinomial.MultinomialMultiplication;
+
+import citcom.subjectiveLogic.MultinomialOpinion;
+import citcom.subjectiveLogic.operators.multinomial.MultinomialAveragingFusion;
+import citcom.subjectiveLogic.operators.multinomial.MultinomialMultiplication;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.*;
 
 public class MultinomialOpinionTest {
 

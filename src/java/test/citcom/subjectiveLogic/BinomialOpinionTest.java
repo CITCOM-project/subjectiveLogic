@@ -1,11 +1,9 @@
-package framework;
+package citcom.subjectiveLogic;
 
-import framework.operators.binomial.BinomialMultiSourceFusion;
-import framework.operators.binomial.BinomialMultiplication;
-import framework.operators.Operator;
+import citcom.subjectiveLogic.operators.binomial.BinomialMultiSourceFusion;
+import citcom.subjectiveLogic.operators.binomial.BinomialMultiplication;
 
 import org.junit.Test;
-
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;

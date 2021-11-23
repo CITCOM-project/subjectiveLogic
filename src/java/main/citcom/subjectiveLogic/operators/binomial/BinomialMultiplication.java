@@ -1,7 +1,7 @@
-package framework.operators.binomial;
+package citcom.subjectiveLogic.operators.binomial;
 
-import framework.BinomialOpinion;
-import framework.operators.Operator;
+import citcom.subjectiveLogic.BinomialOpinion;
+import citcom.subjectiveLogic.operators.Operator;
 
 public class BinomialMultiplication implements Operator<BinomialOpinion> {
 

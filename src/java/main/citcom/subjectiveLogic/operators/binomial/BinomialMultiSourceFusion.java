@@ -1,10 +1,11 @@
-package framework.operators.binomial;
+package citcom.subjectiveLogic.operators.binomial;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import framework.operators.Operator;
-import framework.BinomialOpinion;
+import citcom.subjectiveLogic.BinomialOpinion;
+import citcom.subjectiveLogic.operators.Operator;
+
 
 public class BinomialMultiSourceFusion implements Operator<BinomialOpinion>{
 

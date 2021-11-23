@@ -1,4 +1,4 @@
-package framework.operators;
+package citcom.subjectiveLogic.operators;
 
 public interface Operator<T> {
 

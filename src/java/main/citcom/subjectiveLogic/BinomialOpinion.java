@@ -1,4 +1,4 @@
-package framework;
+package citcom.subjectiveLogic;
 
 
 import java.util.Objects;

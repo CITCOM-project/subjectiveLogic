@@ -1,7 +1,6 @@
-package framework;
+package citcom.subjectiveLogic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class MultinomialOpinion extends SubjectiveOpinion<List<Double>>{

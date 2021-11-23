@@ -1,11 +1,11 @@
-package framework.operators.binomial;
+package citcom.subjectiveLogic.operators.binomial;
 
 import org.junit.Test;
-
-import framework.BinomialOpinion;
-
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+
+import citcom.subjectiveLogic.BinomialOpinion;
+
 
 public class BinomialDeductionTest {
 

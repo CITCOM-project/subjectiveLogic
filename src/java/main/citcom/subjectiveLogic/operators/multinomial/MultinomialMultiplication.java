@@ -1,10 +1,10 @@
-package framework.operators.multinomial;
+package citcom.subjectiveLogic.operators.multinomial;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import framework.operators.Operator;
-import framework.MultinomialOpinion;
+import citcom.subjectiveLogic.MultinomialOpinion;
+import citcom.subjectiveLogic.operators.Operator;
 
 public class MultinomialMultiplication implements Operator<MultinomialOpinion>{
 

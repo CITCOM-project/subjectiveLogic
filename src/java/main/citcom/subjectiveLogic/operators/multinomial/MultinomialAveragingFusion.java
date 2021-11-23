@@ -1,7 +1,7 @@
-package framework.operators.multinomial;
+package citcom.subjectiveLogic.operators.multinomial;
 
-import framework.operators.Operator;
-import framework.MultinomialOpinion;
+import citcom.subjectiveLogic.operators.Operator;
+import citcom.subjectiveLogic.MultinomialOpinion;
 
 import java.util.ArrayList;
 import java.util.List;
