@@ -10,6 +10,7 @@ public class MultinomialOpinion extends SubjectiveOpinion<List<Double>>{
      * The top-level list: A list of domains that have been multiplied together to produce this domain.
      * Second-level list: List of elements corresponding to a specific domain.
      * Third-level list: Either a single String or, if product, a list of strings that have been combined together.
+     * TODO - need a better data structure to represent this...
      */
     protected List<List<List>> domain;
 
@@ -131,33 +132,6 @@ public class MultinomialOpinion extends SubjectiveOpinion<List<Double>>{
         return simplified;
     }
 
-
-    /**
-     * Assumes that, if simplification has happened, it has happened to all opinions in a product, not just a selection.
-     * @param sequence
-     * @param from
-     * @param domainIndex
-     * @return
-     */
-    public double probabilityOfEvents(List sequence, int from, int domainIndex){
-        //base case
-        List<List> d = domain.get(domainIndex);
-        if(sequence.size()==0)
-            return 0D;
-        if(!d.get(0).contains(sequence.get(0)))
-            return 0D;
-        int element = d.indexOf(sequence.get(0));
-        if(sequence.size()==1){
-            return belief.get(from+element);
-        }
-        else {
-            int sizePerElement = (int) Math.pow(d.size(),sequence.size()-1);
-            //int sizePerElement = (int)Math.pow(getDomain().size(),sequence.size()-1);
-            int f = element * sizePerElement;
-            return probabilityOfEvents(sequence.subList(1,sequence.size()),f,domainIndex+1);
-        }
-
-    }
 
     public MultinomialOpinion clone(){
         return new MultinomialOpinion(belief,apriori,domain);

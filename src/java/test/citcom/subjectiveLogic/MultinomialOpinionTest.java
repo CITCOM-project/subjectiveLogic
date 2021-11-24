@@ -64,6 +64,7 @@ public class MultinomialOpinionTest {
         }
     }
 
+
     @Test
     public void simplificationTest(){
         List<Double> gender = new ArrayList<>();
