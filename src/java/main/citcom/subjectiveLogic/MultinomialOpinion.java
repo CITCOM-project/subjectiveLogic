@@ -22,6 +22,10 @@ public class MultinomialOpinion extends SubjectiveOpinion<List<Double>>{
         this.domain = domain;
     }
 
+    public boolean isSimplified(){
+        return isSimplified;
+    }
+
     /**
      * Create multinomial opinion with uninformative priors.
      * @param belief
