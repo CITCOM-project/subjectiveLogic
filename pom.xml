@@ -36,7 +36,7 @@
         <repository>
             <id>github</id>
             <name>GitHub neilwalkinshaw Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/CITCOM-project/subjectiveLogic</url>
+            <url>https://maven.pkg.github.com/citcom-project/subjectivelogic</url>
         </repository>
 </distributionManagement>
 </project>
