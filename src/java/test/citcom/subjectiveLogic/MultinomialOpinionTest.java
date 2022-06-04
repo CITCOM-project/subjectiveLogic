@@ -62,6 +62,7 @@ public class MultinomialOpinionTest {
         for (Double product : multi.getBelief()) {
             System.out.println(product);
         }
+
     }
 
 

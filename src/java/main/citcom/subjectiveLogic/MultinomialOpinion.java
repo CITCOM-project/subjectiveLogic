@@ -1,5 +1,7 @@
 package citcom.subjectiveLogic;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,6 +150,26 @@ public class MultinomialOpinion extends SubjectiveOpinion<List<Double>>{
             result+=b;
         }
         return result;
+    }
+
+    public String toString(){
+        String retValue = "";
+        boolean first = true;
+        for(Double d : belief){
+            BigDecimal bd = BigDecimal.valueOf(d);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            if(!first){
+                retValue+=",";
+            }
+            else{
+                first = false;
+            }
+            retValue+=bd;
+        }
+        BigDecimal bd = BigDecimal.valueOf(uncertainty);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        retValue+=","+bd;
+        return retValue;
     }
 
 }
